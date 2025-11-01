@@ -4,7 +4,7 @@ import { Input } from './ui/input';
 import { Button } from './ui/button';
 import { Textarea } from './ui/textarea';
 import { Label } from './ui/label';
-import { createEvent } from '../backend/api';
+import { createEvent } from '../actions/createEvent';
 import { Event } from '../types';
 import { toast } from '../hooks/use-toast';
 
@@ -22,6 +22,7 @@ export default function CreateEventForm({ onCreated }: CreateEventFormProps) {
     maxParticipants: '',
     currentParticipants: '',
   });
+
   const [loading, setLoading] = useState(false);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
@@ -72,11 +73,11 @@ export default function CreateEventForm({ onCreated }: CreateEventFormProps) {
       </div>
       <div>
         <Label htmlFor="maxParticipants">Max Participants</Label>
-        <Input id="maxParticipants" name="maxParticipants" type="number" onChange={handleChange} value={form.maxParticipants} />
+        <Input id="maxParticipants" name="maxParticipants" onChange={handleChange} type="number" value={form.maxParticipants} />
       </div>
       <div>
         <Label htmlFor="currentParticipants">Current Participants</Label>
-        <Input id="currentParticipants" name="currentParticipants" type="number" onChange={handleChange} value={form.currentParticipants} />
+        <Input id="currentParticipants" name="currentParticipants" onChange={handleChange} type="number" value={form.currentParticipants} />
       </div>
       <Button disabled={loading} type="submit">{loading ? 'Creating...' : 'Create Event'}</Button>
     </form>
