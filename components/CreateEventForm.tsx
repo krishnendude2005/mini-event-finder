@@ -15,6 +15,7 @@ interface Props {
 export const CreateEventForm: React.FC<Props> = ({ onCreated }) => {
   const [form, setForm] = useState({
     title: '', description: '', date: '', location: '', tags: '',
+    maxParticipants: '', currentParticipants: '',
   });
   const [loading, setLoading] = useState(false);
   const toast = useToast();
@@ -27,10 +28,15 @@ export const CreateEventForm: React.FC<Props> = ({ onCreated }) => {
     e.preventDefault();
     setLoading(true);
     try {
-      const event = await createEvent({ ...form, tags: form.tags.split(',').map(tag => tag.trim()) });
+      const event = await createEvent({ 
+        ...form, 
+        tags: form.tags.split(',').map(tag => tag.trim()),
+        maxParticipants: Number(form.maxParticipants),
+        currentParticipants: Number(form.currentParticipants),
+      });
       toast('Event created');
       onCreated(event);
-      setForm({ title: '', description: '', date: '', location: '', tags: '' });
+      setForm({ title: '', description: '', date: '', location: '', tags: '', maxParticipants: '', currentParticipants: '' });
     } catch (err) {
       toast('Failed to create event');
     } finally {
@@ -39,28 +45,36 @@ export const CreateEventForm: React.FC<Props> = ({ onCreated }) => {
   };
 
   return (
-    <Form onSubmit={handleSubmit} className="space-y-3 p-4">
+    <form className="space-y-3 p-4" onSubmit={handleSubmit}>
       <div>
         <Label htmlFor="title">Title</Label>
-        <Input name="title" id="title" value={form.title} onChange={handleChange} required />
+        <Input id="title" name="title" onChange={handleChange} required value={form.title} />
       </div>
       <div>
         <Label htmlFor="description">Description</Label>
-        <Textarea name="description" id="description" value={form.description} onChange={handleChange} required />
+        <Textarea id="description" name="description" onChange={handleChange} required value={form.description} />
       </div>
       <div>
         <Label htmlFor="date">Date</Label>
-        <Input name="date" id="date" type="date" value={form.date} onChange={handleChange} required />
+        <Input id="date" name="date" onChange={handleChange} required type="date" value={form.date} />
       </div>
       <div>
         <Label htmlFor="location">Location</Label>
-        <Input name="location" id="location" value={form.location} onChange={handleChange} required />
+        <Input id="location" name="location" onChange={handleChange} required value={form.location} />
       </div>
       <div>
         <Label htmlFor="tags">Tags (comma separated)</Label>
-        <Input name="tags" id="tags" value={form.tags} onChange={handleChange} />
+        <Input id="tags" name="tags" onChange={handleChange} value={form.tags} />
       </div>
-      <Button type="submit" disabled={loading}>{loading ? 'Creating...' : 'Create Event'}</Button>
-    </Form>
+      <div>
+        <Label htmlFor="maxParticipants">Max Participants</Label>
+        <Input id="maxParticipants" name="maxParticipants" type="number" onChange={handleChange} value={form.maxParticipants} />
+      </div>
+      <div>
+        <Label htmlFor="currentParticipants">Current Participants</Label>
+        <Input id="currentParticipants" name="currentParticipants" type="number" onChange={handleChange} value={form.currentParticipants} />
+      </div>
+      <Button disabled={loading} type="submit">{loading ? 'Creating...' : 'Create Event'}</Button>
+    </form>
   );
 };
