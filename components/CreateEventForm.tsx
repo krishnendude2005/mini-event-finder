@@ -1,24 +1,28 @@
 import React, { useState } from 'react';
-import { Form } from './ui/form';
+import { Card } from './ui/card';
 import { Input } from './ui/input';
-import { Textarea } from './ui/textarea';
 import { Button } from './ui/button';
+import { Textarea } from './ui/textarea';
 import { Label } from './ui/label';
-import { createEvent } from '../actions/createEvent';
-import { Event } from '../types/event';
-import { useToast } from '../hooks/use-toast';
+import { createEvent } from '../backend/api';
+import { Event } from '../types';
+import { toast } from '../hooks/use-toast';
 
-interface Props {
+interface CreateEventFormProps {
   onCreated: (event: Event) => void;
 }
 
-export const CreateEventForm: React.FC<Props> = ({ onCreated }) => {
+export default function CreateEventForm({ onCreated }: CreateEventFormProps) {
   const [form, setForm] = useState({
-    title: '', description: '', date: '', location: '', tags: '',
-    maxParticipants: '', currentParticipants: '',
+    title: '',
+    description: '',
+    date: '',
+    location: '',
+    tags: '',
+    maxParticipants: '',
+    currentParticipants: '',
   });
   const [loading, setLoading] = useState(false);
-  const toast = useToast();
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     setForm({ ...form, [e.target.name]: e.target.value });
@@ -28,8 +32,8 @@ export const CreateEventForm: React.FC<Props> = ({ onCreated }) => {
     e.preventDefault();
     setLoading(true);
     try {
-      const event = await createEvent({ 
-        ...form, 
+      const event = await createEvent({
+        ...form,
         tags: form.tags.split(',').map(tag => tag.trim()),
         maxParticipants: Number(form.maxParticipants),
         currentParticipants: Number(form.currentParticipants),
