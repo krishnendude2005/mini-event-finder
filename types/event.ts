@@ -4,15 +4,18 @@ export interface Event {
   description: string;
   date: string; // ISO date
   location: string;
-  tags: string[];
+  maxParticipants: number;
+  currentParticipants: number;
+  tags?: string[];
 }
-  
-  export interface CreateEventInput {
-    title: string;
-    description: string;
-    location: string;
-    date: string;
-    maxParticipants: number;
-    currentParticipants: number;
-  }
-  
+
+export interface CreateEventInput {
+  id: string;
+  title: string;
+  description: string;
+  date: string;
+  location: string;
+  maxParticipants: number;
+  currentParticipants: number;
+  tags?: string[];
+}
