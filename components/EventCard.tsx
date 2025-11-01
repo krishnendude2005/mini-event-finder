@@ -9,8 +9,13 @@ export const EventCard: React.FC<{ event: Event; onClick?: () => void }> = ({ ev
     <h2 className="text-xl font-bold mb-1">{event.title}</h2>
     <div className="text-gray-600 text-sm mb-2">{formatDate(event.date)} | {event.location}</div>
     <div className="mb-2 text-gray-700 line-clamp-2">{event.description}</div>
-    <div className="flex gap-2">
-      {event.tags.map(tag => <Badge key={tag}>{tag}</Badge>)}
+    <div className="mb-2 text-sm text-gray-600">
+      Participants: {event.currentParticipants}/{event.maxParticipants}
     </div>
+    {event.tags && event.tags.length > 0 && (
+      <div className="flex gap-2">
+        {event.tags.map(tag => <Badge key={tag}>{tag}</Badge>)}
+      </div>
+    )}
   </Card>
 );
